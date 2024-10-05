@@ -20,3 +20,26 @@ while i<1000000:
 #print(x,y)
 #x,y=pyautogui.position()
 #pyautogui.moveTo(x-10,y)
+
+
+
+
+from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+from comtypes import CLSCTX_ALL
+from ctypes import POINTER, cast
+
+# Get default audio device
+devices = AudioUtilities.GetSpeakers()
+interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+volume = cast(interface, POINTER(IAudioEndpointVolume))
+
+# Get current volume level (0.0 to 1.0)
+current_volume = volume.GetMasterVolumeLevelScalar()
+print(f"Current Volume: {current_volume * 100:.2f}%")
+
+# Set volume to 50%
+volume.SetMasterVolumeLevelScalar(0.5, None)
+
+# Mute/Unmute the system volume
+volume.SetMute(1, None)  # Mute
+volume.SetMute(0, None)  # Unmute

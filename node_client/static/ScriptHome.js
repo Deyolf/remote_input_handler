@@ -16,3 +16,7 @@ function sendKeycap(key) {
         document.getElementById("response").innerText = "Error sending the keycap!";
     });
 }
+
+function updateValue(){
+    
+}
