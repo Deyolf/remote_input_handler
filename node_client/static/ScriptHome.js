@@ -1,5 +1,9 @@
+//intervals
+a = setInterval(getVolume, 500);
+
 
 function sendKeycap(key) {
+    console.log(key)
     fetch('http://192.168.178.89:50000/receive_keycap', {
         method: 'POST',
         headers: {
@@ -7,30 +11,42 @@ function sendKeycap(key) {
         },
         body: JSON.stringify({ keycap: key }),
     })
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById("response").innerText = data.message || data.error;
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-        document.getElementById("response").innerText = "Error sending the keycap!";
-    });
+        .then(response => response.json())
+        .catch((error) => {
+            console.error('Error:', error);
+        });
 }
 
-function updateVolume(volume){
+function updateVolume(voli) {
+    vol = voli + '';
+    console.log(vol)
     fetch('http://192.168.178.89:50000/receive_volume', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ keycap: key }),
+        body: JSON.stringify({ volume: vol }),
     })
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById("response").innerText = data.message || data.error;
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-        document.getElementById("response").innerText = "Error sending the keycap!";
-    });
+        .then(response => response.json())
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+}
+
+function getVolume() {
+    fetch('http://192.168.178.89:50000/get_volume')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Errore nella richiesta');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Volume corrente:", data.volume);
+            volume = data.volume;
+            document.getElementById('customRange').value = volume;
+        })
+        .catch(error => {
+            console.error('Errore:', error);
+        });
 }

@@ -1,12 +1,34 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import pyautogui
-from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
-from comtypes import CLSCTX_ALL
-from ctypes import POINTER, cast
 
 app = Flask(__name__)
 CORS(app)
+
+from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+from ctypes import cast, POINTER
+from comtypes import CLSCTX_ALL
+
+devices = AudioUtilities.GetSpeakers()
+interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+volume = cast(interface, POINTER(IAudioEndpointVolume))
+
+current_volume = float(volume.GetMasterVolumeLevelScalar())
+
+
+# Set volume to a percentage (0 to 100)
+def set_volume(vol_percentage):
+
+    global current_volume
+    # Convert percentage to a scalar value (0.0 - 1.0)
+    scalar_value = vol_percentage / 100.0
+    
+    # Set the master volume
+    volume.SetMasterVolumeLevelScalar(scalar_value, None)
+    print(f"Volume set to: {vol_percentage}%")
+    current_volume = float(volume.GetMasterVolumeLevelScalar())
+
+
 
 # Route to accept key input
 @app.route('/receive_keycap', methods=['POST'])
@@ -40,18 +62,24 @@ def receive_volume():
         if volume:
             # Here, you can handle the volume, e.g., log it or respond with a message.
             print(volume)
-            devices = AudioUtilities.GetSpeakers()
-            interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-            volumesys = cast(interface, POINTER(IAudioEndpointVolume))
-
-            # Set volumesys to volume
-            volumesys.SetMasterVolumeLevelScalar((volume/100), None)
+            # Set volume to 50%
+            set_volume(int(volume))
 
             return jsonify({"message": f"Received volume: {volume}"})
         else:
             return jsonify({"error": "volume data missing"}), 400
     else:
         return jsonify({"error": "Invalid input, expected JSON data"}), 400
+
+@app.route("/get_volume")
+def get_volume():
+    print("Getting volume")
+    print(current_volume)
+    print(current_volume*100)
+    data = {
+        "volume" : current_volume*100
+    }
+    return jsonify(data)
 
 if __name__ == '__main__':
     app.run(host='192.168.178.89', port=50000)
