@@ -44,7 +44,8 @@ function getVolume() {
         .then(data => {
             console.log("Volume corrente:", data.volume);
             volume = data.volume;
-            document.getElementById('customRange').value = volume;
+            document.getElementById("customRange").value = isNaN(parseInt(volume, 10)) ? 0 : parseInt(volume, 10);
+            sdocument.getElementById("customRange").innerHTML=volume;
         })
         .catch(error => {
             console.error('Errore:', error);
