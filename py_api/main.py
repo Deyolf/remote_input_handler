@@ -192,10 +192,10 @@ def receive_mouse_move_down():
 @app.route("/get_volume")
 def get_volume():
     print("Getting volume")
-    print(current_volume)
-    print(current_volume*100)
+    print(float(volume.GetMasterVolumeLevelScalar()))
+    print(int(float(volume.GetMasterVolumeLevelScalar())*100))
     data = {
-        "volume" : current_volume*100
+        "volume" : int(float(volume.GetMasterVolumeLevelScalar())*100)
     }
     return jsonify(data)
 

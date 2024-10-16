@@ -1,5 +1,5 @@
 //intervals
-//a = setInterval(getVolume, 500);
+a = setInterval(getVolume, 500);
 
 
 function sendKeycap(key) {
@@ -64,7 +64,7 @@ function updateVolume(voli) {
 }
 
 function getVolume() {
-    fetch('http://192.168.178.89:50000/get_volume')
+    fetch('http://192.168.178.89:50000/get_volume', { method: 'GET' })
         .then(response => {
             if (!response.ok) {
                 throw new Error('Errore nella richiesta');
@@ -75,7 +75,7 @@ function getVolume() {
             console.log("Volume corrente:", data.volume);
             volume = data.volume;
             document.getElementById("customRange").value = isNaN(parseInt(volume, 10)) ? 0 : parseInt(volume, 10);
-            sdocument.getElementById("customRange").innerHTML=volume;
+            document.getElementById("customRange").innerHTML=volume;
         })
         .catch(error => {
             console.error('Errore:', error);
