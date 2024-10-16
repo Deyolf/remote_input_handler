@@ -71,6 +71,86 @@ def receive_volume():
     else:
         return jsonify({"error": "Invalid input, expected JSON data"}), 400
 
+@app.route('/receive_mouse_move_left', methods=['POST'])
+def receive_mouse_move_left():
+    x,y=pyautogui.position()
+    # Check if the request contains JSON data
+    if request.is_json:
+        data = request.get_json()
+        
+        # Retrieve keycap information
+        movement = data.get('movement')
+        
+        if movement:
+            print(movement)
+            pyautogui.moveTo(x-movement,y)
+
+            return jsonify({"message": f"Received left: {movement}"})
+        else:
+            return jsonify({"error": "movement data missing"}), 400
+    else:
+        return jsonify({"error": "Invalid input, expected JSON data"}), 400
+
+@app.route('/receive_mouse_move_right', methods=['POST'])
+def receive_mouse_move_right():
+    x,y=pyautogui.position()
+    # Check if the request contains JSON data
+    if request.is_json:
+        data = request.get_json()
+        
+        # Retrieve keycap information
+        movement = data.get('movement')
+        
+        if movement:
+            print(movement)
+            pyautogui.moveTo(x+movement,y)
+
+            return jsonify({"message": f"Received right: {movement}"})
+        else:
+            return jsonify({"error": "movement data missing"}), 400
+    else:
+        return jsonify({"error": "Invalid input, expected JSON data"}), 400
+
+@app.route('/receive_mouse_move_up', methods=['POST'])
+def receive_mouse_move_up():
+    x,y=pyautogui.position()
+    # Check if the request contains JSON data
+    if request.is_json:
+        data = request.get_json()
+        
+        # Retrieve keycap information
+        movement = data.get('movement')
+        
+        if movement:
+            print(movement)
+            pyautogui.moveTo(x,y-movement)
+
+            return jsonify({"message": f"Received up: {movement}"})
+        else:
+            return jsonify({"error": "movement data missing"}), 400
+    else:
+        return jsonify({"error": "Invalid input, expected JSON data"}), 400
+
+@app.route('/receive_mouse_move_down', methods=['POST'])
+def receive_mouse_move_down():
+    x,y=pyautogui.position()
+    # Check if the request contains JSON data
+    if request.is_json:
+        data = request.get_json()
+        
+        # Retrieve keycap information
+        movement = data.get('movement')
+        
+        if movement:
+            print(movement)
+            pyautogui.moveTo(x,y+movement)
+
+            return jsonify({"message": f"Received down: {movement}"})
+        else:
+            return jsonify({"error": "movement data missing"}), 400
+    else:
+        return jsonify({"error": "Invalid input, expected JSON data"}), 400
+
 @app.route("/get_volume")
 def get_volume():
     print("Getting volume")
