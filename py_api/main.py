@@ -50,6 +50,44 @@ def receive_keycap():
     else:
         return jsonify({"error": "Invalid input, expected JSON data"}), 400
 
+@app.route('/receive_keycap_hold', methods=['POST'])
+def receive_keycap_hold():
+    # Check if the request contains JSON data
+    if request.is_json:
+        data = request.get_json()
+        
+        # Retrieve keycap information
+        keycap = data.get('keycap')
+        
+        if keycap:
+            # Here, you can handle the keycap, e.g., log it or respond with a message.
+            print(keycap)
+            pyautogui.keyDown(keycap)
+            return jsonify({"message": f"Received keycap: {keycap}"})
+        else:
+            return jsonify({"error": "Keycap data missing"}), 400
+    else:
+        return jsonify({"error": "Invalid input, expected JSON data"}), 400
+
+@app.route('/receive_keycap_release', methods=['POST'])
+def receive_keycap_release():
+    # Check if the request contains JSON data
+    if request.is_json:
+        data = request.get_json()
+        
+        # Retrieve keycap information
+        keycap = data.get('keycap')
+        
+        if keycap:
+            # Here, you can handle the keycap, e.g., log it or respond with a message.
+            print(keycap)
+            pyautogui.keyUp(keycap)
+            return jsonify({"message": f"Received keycap: {keycap}"})
+        else:
+            return jsonify({"error": "Keycap data missing"}), 400
+    else:
+        return jsonify({"error": "Invalid input, expected JSON data"}), 400
+
 @app.route('/receive_volume', methods=['POST'])
 def receive_volume():
     # Check if the request contains JSON data
