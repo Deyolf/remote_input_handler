@@ -1,10 +1,12 @@
 //intervals
 a = setInterval(getVolume, 500);
-
+let ip = "192.168.178.89"
+let port = ":50000"
+let soket= ip+port
 
 function sendKeycap(key) {
     console.log(key)
-    fetch('http://192.168.178.89:50000/receive_keycap', {
+    fetch(`http://${soket}/receive_keycap`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json', 
@@ -19,7 +21,7 @@ function sendKeycap(key) {
 
 function sendKeycapHold(key) {
     console.log(key)
-    fetch('http://192.168.178.89:50000/receive_keycap_hold', {
+    fetch(`http://${soket}/receive_keycap_hold`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -34,7 +36,7 @@ function sendKeycapHold(key) {
 
 function sendKeycapRelease(key) {
     console.log(key)
-    fetch('http://192.168.178.89:50000/receive_keycap_release', {
+    fetch(`http://${soket}/receive_keycap_release`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -50,7 +52,7 @@ function sendKeycapRelease(key) {
 function updateVolume(voli) {
     vol = voli + '';
     console.log(vol)
-    fetch('http://192.168.178.89:50000/receive_volume', {
+    fetch(`http://${soket}/receive_volume`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -64,7 +66,7 @@ function updateVolume(voli) {
 }
 
 function getVolume() {
-    fetch('http://192.168.178.89:50000/get_volume', { method: 'GET' })
+    fetch(`http://${soket}/get_volume`, { method: 'GET' })
         .then(response => {
             if (!response.ok) {
                 throw new Error('Errore nella richiesta');
