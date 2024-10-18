@@ -8,7 +8,7 @@ const path = require("path");
 var app = express();
 app.use(express.static(path.join(__dirname, "static")));
 
-app.get("/", function documentazione(req, res) {
+app.get("/", function Homepage(req, res) {
     //req oggetto che descrive il richiedente
     //res oggetto per la gestione della risposta
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
