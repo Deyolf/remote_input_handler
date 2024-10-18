@@ -1,0 +1,20 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 50px;
+ 
+}
+.navbar a {
+    color: #0056B3 !important; /* Forza il colore bianco */
+}
+
+button{
+    background-color: #0056B3 !important;
+    color: #212529 !important;
+    font-weight: bold !important;
+}
+
+.btn {
+    width: 90%; /* Tutti i pulsanti occupano la larghezza completa del loro contenitore */
+    padding: .75rem 1rem; /* Aumenta il padding */
+}

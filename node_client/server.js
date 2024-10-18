@@ -1,4 +1,4 @@
-const hostname = '192.168.178.89';//in casa 127.0.0.1
+const hostname = '192.168.178.89';
 const port = 50050;
 
 var express = require("express");

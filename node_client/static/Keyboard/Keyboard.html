@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keycap Sender</title>
+    <link rel="stylesheet" href="StyleKeyboard.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-dark text-light">
+
+    <nav class="navbar bg-dark text-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="../Homepage.html">Homepage</a>
+          <a class="navbar-brand" href="../Mouse/Mouse.html">Mouse</a>
+        </div>
+      </nav>
+    <div class="container mt-5 text-center">
+        <div class="row mb-3">
+            <div class="col"><button class="btn btn-primary"  onclick="sendKeycap('Esc')">Esc</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('1')">1</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('2')">2</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('3')">3</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('4')">4</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('5')">5</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('6')">6</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('7')">7</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('8')">8</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('9')">9</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('0')">0</button></div>
+        </div>
+        <div class="row mb-3">
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('q')">Q</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('w')">W</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('e')">E</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('r')">R</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('t')">T</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('y')">Y</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('u')">U</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('i')">I</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('o')">O</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('p')">P</button></div>
+        </div>
+    
+        <div class="row mb-3">
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('a')">A</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('s')">S</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('d')">D</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('f')">F</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('g')">G</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('h')">H</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('j')">J</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('k')">K</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('l')">L</button></div>
+        </div>
+        <div class="row mb-3">
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('z')">Z</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('x')">X</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('c')">C</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('v')">V</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('b')">B</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('n')">N</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('m')">M</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('Enter')">Enter</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('backspace')">Backspace</button></div>
+        </div>
+    
+        <div class="row mb-3">
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('capslock')">Capslock</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="TskMgr()">Tsk-Mgr</button></div> <!--!!!DA FARE!!! fai la shortcut :) -->
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('volumeup')">Vol ↑</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('volumemute')">🔇</button></div>
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('volumedown')">Vol ↓</button></div> 
+            <div class="col"><button class="btn btn-primary" onclick="AltF4()">Alt-F4</button></div> <!--!!!DA FARE!!! fai alt f4 :) --> 
+            <div class="col"><button class="btn btn-primary" onclick="sendKeycap('Space')">❚❚</button></div>
+            <!--<div class="col-6"><button class="btn btn-success w-100" onclick="sendKeycap('Space')">Spaziooooooo</button></div> --> 
+        </div>
+        <div class="d-grid gap-2">
+            <button class="btn btn-primary w-100" type="button" onclick="sendKeycap('Space')">SPACE</button>
+          </div>
+        <!-- Slider with output value -->
+        <input type="range" class="form-range" min="0" max="100" id="customRange" oninput="updateVolume(this.value)">
+        <!--<p style="color:#0056B3">Value: <span id="sliderValue">50</span></p>-->
+        <!-- Slider END -->
+        
+    </div>
+
+    <p id="response"></p>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="ScriptKeyboard.js"></script>
+
+</body>
+</html>
