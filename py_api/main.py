@@ -2,6 +2,9 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import pyautogui
 
+ip = '192.168.178.89'
+port = ':50000'
+
 app = Flask(__name__)
 CORS(app)
 
@@ -27,6 +30,27 @@ def set_volume(vol_percentage):
     volume.SetMasterVolumeLevelScalar(scalar_value, None)
     print(f"Volume set to: {vol_percentage}%")
     current_volume = float(volume.GetMasterVolumeLevelScalar())
+
+
+@app.route('/receive_keycap_string', methods=['POST'])
+def receive_keycap_string():
+    # Check if the request contains JSON data
+    if request.is_json:
+        data = request.get_json()
+        
+        # Retrieve keycap information
+        string = data.get('keycap_string')
+        
+        if string:
+            # Here, you can handle the keycap, e.g., log it or respond with a message.
+            for letter in string:
+                print(letter)
+                pyautogui.press(letter)
+            return jsonify({"message": f"Received keycap: {string}"}), 200
+        else:
+            return jsonify({"error": "Keycap data missing"}), 400
+    else:
+        return jsonify({"error": "Invalid input, expected JSON data"}), 400
 
 
 
@@ -200,4 +224,4 @@ def get_volume():
     return jsonify(data)
 
 if __name__ == '__main__':
-    app.run(host='192.168.178.89', port=50000)
+    app.run(host=ip, port=port)
