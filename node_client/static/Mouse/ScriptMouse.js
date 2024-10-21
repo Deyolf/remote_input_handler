@@ -1,3 +1,4 @@
+//Nothing for u here
 //intervals
 a = setInterval(getVolume, 500);
 let ip = "192.168.178.89"
