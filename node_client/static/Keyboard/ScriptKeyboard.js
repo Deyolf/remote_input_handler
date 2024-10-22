@@ -1,10 +1,14 @@
 //intervals
 a = setInterval(getVolume, 500);
+
+
 let ip = "192.168.178.89"
 let port = ":50000"
 let soket= ip+port
 
-function sendKeycap(key) {
+var queue = [];
+
+function sendBuffer(key) {
     console.log(key)
     fetch(`http://${soket}/receive_keycap`, {
         method: 'POST',
@@ -14,8 +18,34 @@ function sendKeycap(key) {
         body: JSON.stringify({ keycap: key }),
     })
         .then(response => response.json())
+        .then(response => {
+            
+        })
         .catch((error) => {
             console.error('Error:', error);
+        });
+}
+
+function sendKeycap(key) {
+    console.log(key)
+    queue.push(key)
+    fetch(`http://${soket}/receive_keycap`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json', 
+        },
+        body: JSON.stringify({ keycap: key }),
+    })
+        .then(response => response.json())
+        .then(response => {
+            console.log(response)
+            console.log(queue)
+            //if (response.status == 200)
+                //queue.shift(key)
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            console.log(queue)
         });
 }
 
