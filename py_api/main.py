@@ -5,6 +5,8 @@ import socket
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from ctypes import cast, POINTER
 from comtypes import CLSCTX_ALL
+import subprocess
+import os
 
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.connect(("8.8.8.8", 80))
@@ -15,9 +17,14 @@ port = 50000
 
 s.close()
 
+if os.path.exists("../ip.txt"):
+    os.remove("../ip.txt")
+
+with open("../ip.txt", 'w') as file:
+    file.write(ip)
+
 app = Flask(__name__)
 CORS(app)
-
 
 devices = AudioUtilities.GetSpeakers()
 interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
@@ -25,6 +32,18 @@ volume = cast(interface, POINTER(IAudioEndpointVolume))
 
 current_volume = float(volume.GetMasterVolumeLevelScalar())
 
+in_debug_mode = False  # Set this based on your application's logic
+
+# Define the path to your Node.js server
+node_client_path = '../node_client/'
+
+# Run the subprocess with the current working directory set
+process = subprocess.run(
+    ['node', 'server.js'],
+    cwd=node_client_path,
+    stdout=subprocess.DEVNULL if not in_debug_mode else None,
+    stderr=subprocess.PIPE if not in_debug_mode else None
+)
 
 # Set volume to a percentage (0 to 100)
 def set_volume(vol_percentage):
