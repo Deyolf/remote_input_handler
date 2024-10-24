@@ -9,3 +9,6 @@ pip install pycaw
 pip install ctypes
 pip install comtypes
 pip install subprocess
+pip install os
+pip install time
+pip install multiprocessing

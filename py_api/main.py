@@ -5,249 +5,160 @@ import socket
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from ctypes import cast, POINTER
 from comtypes import CLSCTX_ALL
-import subprocess
+from subprocess import Popen
 import os
+import time
+from multiprocessing import Process, Event
 
+# Get the IP address
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.connect(("8.8.8.8", 80))
-print(s.getsockname()[0])
-
 ip = s.getsockname()[0]
+s.close()
+print(ip)
+
 port = 50000
 
-s.close()
-
+# Write IP to a file
 if os.path.exists("../ip.txt"):
     os.remove("../ip.txt")
 
 with open("../ip.txt", 'w') as file:
     file.write(ip)
 
+# Initialize Flask app
 app = Flask(__name__)
 CORS(app)
 
+# Audio setup
 devices = AudioUtilities.GetSpeakers()
 interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
 volume = cast(interface, POINTER(IAudioEndpointVolume))
-
 current_volume = float(volume.GetMasterVolumeLevelScalar())
 
-in_debug_mode = False  # Set this based on your application's logic
-
 # Define the path to your Node.js server
-node_client_path = '../node_client/'
+node_client_path = '../node_client/server.js'
 
-# Run the subprocess with the current working directory set
-process = subprocess.run(
-    ['node', 'server.js'],
-    cwd=node_client_path,
-    stdout=subprocess.DEVNULL if not in_debug_mode else None,
-    stderr=subprocess.PIPE if not in_debug_mode else None
-)
+# Function to start the Node.js server as a subprocess
+def run_node_server(stop_event):
+    process = Popen(['node', node_client_path])
+    print("Node server started with PID:", process.pid)
+
+    # Wait for the stop event
+    while not stop_event.is_set():
+        time.sleep(1)
+    
+    # Terminate the Node.js server when the event is set
+    print("Terminating Node server...")
+    process.terminate()
+    process.wait()
+    print("Node server stopped.")
 
 # Set volume to a percentage (0 to 100)
 def set_volume(vol_percentage):
-
     global current_volume
-    # Convert percentage to a scalar value (0.0 - 1.0)
     scalar_value = vol_percentage / 100.0
-    
-    # Set the master volume
     volume.SetMasterVolumeLevelScalar(scalar_value, None)
-    print(f"Volume set to: {vol_percentage}%")
     current_volume = float(volume.GetMasterVolumeLevelScalar())
+    print(f"Volume set to: {vol_percentage}%")
 
-
+# Flask routes
 @app.route('/receive_keycap_string', methods=['POST'])
 def receive_keycap_string():
-    # Check if the request contains JSON data
-    if request.is_json:
-        data = request.get_json()
-        
-        # Retrieve keycap information
-        string = data.get('keycap_string')
-        
-        if string:
-            # Here, you can handle the keycap, e.g., log it or respond with a message.
-            for letter in string:
-                print(letter)
-                pyautogui.press(letter)
-            return jsonify({"message": f"Received keycap: {string}"}), 200
-        else:
-            return jsonify({"error": "Keycap data missing"}), 400
-    else:
-        return jsonify({"error": "Invalid input, expected JSON data"}), 400
+    data = request.get_json()
+    string = data.get('keycap_string')
+    if string:
+        for letter in string:
+            print(letter)
+            pyautogui.press(letter)
+        return jsonify({"message": f"Received keycap: {string}"}), 200
+    return jsonify({"error": "Keycap data missing"}), 400
 
-
-
-# Route to accept key input
 @app.route('/receive_keycap', methods=['POST'])
 def receive_keycap():
-    # Check if the request contains JSON data
-    if request.is_json:
-        data = request.get_json()
-        
-        # Retrieve keycap information
-        keycap = data.get('keycap')
-        
-        if keycap:
-            # Here, you can handle the keycap, e.g., log it or respond with a message.
-            print(keycap)
-            pyautogui.press(keycap)
-            return jsonify({"message": f"Received keycap: {keycap}"})
-        else:
-            return jsonify({"error": "Keycap data missing"}), 400
-    else:
-        return jsonify({"error": "Invalid input, expected JSON data"}), 400
+    data = request.get_json()
+    keycap = data.get('keycap')
+    if keycap:
+        print(keycap)
+        pyautogui.press(keycap)
+        return jsonify({"message": f"Received keycap: {keycap}"})
+    return jsonify({"error": "Keycap data missing"}), 400
 
 @app.route('/receive_keycap_hold', methods=['POST'])
 def receive_keycap_hold():
-    # Check if the request contains JSON data
-    if request.is_json:
-        data = request.get_json()
-        
-        # Retrieve keycap information
-        keycap = data.get('keycap')
-        
-        if keycap:
-            # Here, you can handle the keycap, e.g., log it or respond with a message.
-            print(keycap)
-            pyautogui.keyDown(keycap)
-            return jsonify({"message": f"Received keycap: {keycap}"})
-        else:
-            return jsonify({"error": "Keycap data missing"}), 400
-    else:
-        return jsonify({"error": "Invalid input, expected JSON data"}), 400
+    data = request.get_json()
+    keycap = data.get('keycap')
+    if keycap:
+        print(keycap)
+        pyautogui.keyDown(keycap)
+        return jsonify({"message": f"Received keycap: {keycap}"})
+    return jsonify({"error": "Keycap data missing"}), 400
 
 @app.route('/receive_keycap_release', methods=['POST'])
 def receive_keycap_release():
-    # Check if the request contains JSON data
-    if request.is_json:
-        data = request.get_json()
-        
-        # Retrieve keycap information
-        keycap = data.get('keycap')
-        
-        if keycap:
-            # Here, you can handle the keycap, e.g., log it or respond with a message.
-            print(keycap)
-            pyautogui.keyUp(keycap)
-            return jsonify({"message": f"Received keycap: {keycap}"})
-        else:
-            return jsonify({"error": "Keycap data missing"}), 400
-    else:
-        return jsonify({"error": "Invalid input, expected JSON data"}), 400
+    data = request.get_json()
+    keycap = data.get('keycap')
+    if keycap:
+        print(keycap)
+        pyautogui.keyUp(keycap)
+        return jsonify({"message": f"Received keycap: {keycap}"})
+    return jsonify({"error": "Keycap data missing"}), 400
 
 @app.route('/receive_volume', methods=['POST'])
 def receive_volume():
-    # Check if the request contains JSON data
-    if request.is_json:
-        data = request.get_json()
-        
-        # Retrieve keycap information
-        volume = data.get('volume')
-        
-        if volume:
-            # Here, you can handle the volume, e.g., log it or respond with a message.
-            print(volume)
-            # Set volume to 50%
-            set_volume(int(volume))
+    data = request.get_json()
+    volume = data.get('volume')
+    if volume is not None:
+        print(volume)
+        set_volume(int(volume))
+        return jsonify({"message": f"Received volume: {volume}"})
+    return jsonify({"error": "Volume data missing"}), 400
 
-            return jsonify({"message": f"Received volume: {volume}"})
-        else:
-            return jsonify({"error": "volume data missing"}), 400
-    else:
-        return jsonify({"error": "Invalid input, expected JSON data"}), 400
+@app.route('/receive_mouse_move', methods=['POST'])
+def receive_mouse_move():
+    x, y = pyautogui.position()
+    data = request.get_json()
+    direction = data.get('direction')
+    movement = data.get('movement', 0)
+    
+    if direction in ['left', 'right', 'up', 'down'] and isinstance(movement, int):
+        if direction == 'left':
+            pyautogui.moveTo(x - movement, y)
+        elif direction == 'right':
+            pyautogui.moveTo(x + movement, y)
+        elif direction == 'up':
+            pyautogui.moveTo(x, y - movement)
+        elif direction == 'down':
+            pyautogui.moveTo(x, y + movement)
+        return jsonify({"message": f"Moved {direction} by {movement}"}), 200
 
-@app.route('/receive_mouse_move_left', methods=['POST'])
-def receive_mouse_move_left():
-    x,y=pyautogui.position()
-    # Check if the request contains JSON data
-    if request.is_json:
-        data = request.get_json()
-        
-        # Retrieve keycap information
-        movement = data.get('movement')
-        
-        if movement:
-            print(movement)
-            pyautogui.moveTo(x-movement,y)
-
-            return jsonify({"message": f"Received left: {movement}"})
-        else:
-            return jsonify({"error": "movement data missing"}), 400
-    else:
-        return jsonify({"error": "Invalid input, expected JSON data"}), 400
-
-@app.route('/receive_mouse_move_right', methods=['POST'])
-def receive_mouse_move_right():
-    x,y=pyautogui.position()
-    # Check if the request contains JSON data
-    if request.is_json:
-        data = request.get_json()
-        
-        # Retrieve keycap information
-        movement = data.get('movement')
-        
-        if movement:
-            print(movement)
-            pyautogui.moveTo(x+movement,y)
-
-            return jsonify({"message": f"Received right: {movement}"})
-        else:
-            return jsonify({"error": "movement data missing"}), 400
-    else:
-        return jsonify({"error": "Invalid input, expected JSON data"}), 400
-
-@app.route('/receive_mouse_move_up', methods=['POST'])
-def receive_mouse_move_up():
-    x,y=pyautogui.position()
-    # Check if the request contains JSON data
-    if request.is_json:
-        data = request.get_json()
-        
-        # Retrieve keycap information
-        movement = data.get('movement')
-        
-        if movement:
-            print(movement)
-            pyautogui.moveTo(x,y-movement)
-
-            return jsonify({"message": f"Received up: {movement}"})
-        else:
-            return jsonify({"error": "movement data missing"}), 400
-    else:
-        return jsonify({"error": "Invalid input, expected JSON data"}), 400
-
-@app.route('/receive_mouse_move_down', methods=['POST'])
-def receive_mouse_move_down():
-    x,y=pyautogui.position()
-    # Check if the request contains JSON data
-    if request.is_json:
-        data = request.get_json()
-        
-        # Retrieve keycap information
-        movement = data.get('movement')
-        
-        if movement:
-            print(movement)
-            pyautogui.moveTo(x,y+movement)
-
-            return jsonify({"message": f"Received down: {movement}"})
-        else:
-            return jsonify({"error": "movement data missing"}), 400
-    else:
-        return jsonify({"error": "Invalid input, expected JSON data"}), 400
+    return jsonify({"error": "Invalid direction or movement"}), 400
 
 @app.route("/get_volume")
 def get_volume():
-    print("Getting volume")
-    print(float(volume.GetMasterVolumeLevelScalar()))
-    print(int(float(volume.GetMasterVolumeLevelScalar())*100))
-    data = {
-        "volume" : int(float(volume.GetMasterVolumeLevelScalar())*100)
-    }
+    current_volume_percentage = int(current_volume * 100)
+    data = {"volume": current_volume_percentage}
+    print(f"Current volume: {current_volume_percentage}%")
     return jsonify(data)
 
+# Shutdown hook for the Flask app
+@app.route('/shutdown', methods=['POST'])
+def shutdown():
+    stop_event.set()
+    node_process.join()
+    return jsonify({"message": "Node server is stopping..."}), 200
+
+# Entry point
 if __name__ == '__main__':
-    app.run(host=ip, port=port)
+    # Create an event for stopping the Node server
+    stop_event = Event()
+    node_process = Process(target=run_node_server, args=(stop_event,))
+    node_process.start()
+    print("Eseguo normalmente")
+
+    try:
+        app.run(host=ip, port=port)
+    except KeyboardInterrupt:
+        print("Shutting down...")
+        stop_event.set()
+        node_process.join()

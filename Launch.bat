@@ -1,2 +1,2 @@
-cd ../py_api/
+cd ./py_api/
 python main.py
