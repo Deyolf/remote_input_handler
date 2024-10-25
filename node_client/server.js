@@ -1,4 +1,4 @@
-let hostname = '192.168.178.89';
+let hostname ;
 const port = 50050;
 
 var express = require("express");
@@ -7,12 +7,13 @@ const path = require("path");
 
 var app = express();
 
-fs.readFile("../ip.txt", 'utf8', (err, data) => {
+console.log('leggo il file');
+hostname= fs.readFileSync("../ip.txt", 'utf8', (err, data) => {
     if (err) {
-        console.error('Errore nella lettura del file:', err);
+        console.log('Errore nella lettura del file:', err);
         return;
     }
-    hostname = data
+    return data
 });
 
 app.use(express.static(path.join(__dirname, "static")));
