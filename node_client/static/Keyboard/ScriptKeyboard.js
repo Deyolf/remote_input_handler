@@ -2,9 +2,9 @@
 a = setInterval(getVolume, 500);
 
 
-let ip = "192.168.178.89"
+let ip = "192.168.178.145"
 let port = ":50000"
-let soket= ip+port
+let soket = ip + port
 
 var queue = [];
 
@@ -13,13 +13,13 @@ function sendBuffer(key) {
     fetch(`http://${soket}/receive_keycap`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json', 
+            'Content-Type': 'application/json',
         },
         body: JSON.stringify({ keycap: key }),
     })
         .then(response => response.json())
         .then(response => {
-            
+
         })
         .catch((error) => {
             console.error('Error:', error);
@@ -32,7 +32,7 @@ function sendKeycap(key) {
     fetch(`http://${soket}/receive_keycap`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json', 
+            'Content-Type': 'application/json',
         },
         body: JSON.stringify({ keycap: key }),
     })
@@ -41,11 +41,13 @@ function sendKeycap(key) {
             console.log(response)
             console.log(queue)
             //if (response.status == 200)
-                //queue.shift(key)
+            //queue.shift(key)
+            return true
         })
         .catch((error) => {
             console.error('Error:', error);
             console.log(queue)
+            return false
         });
 }
 
@@ -107,21 +109,21 @@ function getVolume() {
             console.log("Volume corrente:", data.volume);
             volume = data.volume;
             document.getElementById("customRange").value = isNaN(parseInt(volume, 10)) ? 0 : parseInt(volume, 10);
-            document.getElementById("customRange").innerHTML=volume;
+            document.getElementById("customRange").innerHTML = volume;
         })
         .catch(error => {
             console.error('Errore:', error);
         });
 }
 
-function AltF4(){
+function AltF4() {
     //alt tab
     sendKeycapHold('Alt')
     sendKeycap('f4')
     sendKeycapRelease('Alt')
 }
 
-function TskMgr(){
+function TskMgr() {
     //ctrl shift escape
     sendKeycapHold('Ctrl')
     sendKeycapHold('Shift')
@@ -129,3 +131,12 @@ function TskMgr(){
     sendKeycapRelease('Shift')
     sendKeycapRelease('Ctrl')
 }
+
+var promises = [];
+var letters = [];
+const input = document.getElementById('textInput');
+input.addEventListener('input', () => {
+    console.log(input.value)
+    sendKeycap(input.value[0])
+    input.value = input.value.slice(1);
+})

@@ -1,5 +1,5 @@
-let hostname ;
-const port = 50050;
+let hostname;
+const port = process.env.PORT || 50050;
 
 var express = require("express");
 var fs = require("fs");
@@ -8,7 +8,7 @@ const path = require("path");
 var app = express();
 
 console.log('leggo il file');
-hostname= fs.readFileSync("../ip.txt", 'utf8', (err, data) => {
+hostname = fs.readFileSync("../ip.txt", 'utf8', (err, data) => {
     if (err) {
         console.log('Errore nella lettura del file:', err);
         return;
@@ -18,9 +18,7 @@ hostname= fs.readFileSync("../ip.txt", 'utf8', (err, data) => {
 
 app.use(express.static(path.join(__dirname, "static")));
 
-app.get("/", function Homepage(req, res) {
-    //req oggetto che descrive il richiedente
-    //res oggetto per la gestione della risposta
+function loadHomepage(req, res) {
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.status(200)
 
@@ -28,7 +26,20 @@ app.get("/", function Homepage(req, res) {
     res.write(fs.readFileSync(filePath, "utf-8"));
 
     res.end();
-});
+}
+
+function loadKeyboard(req,res) {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.status(200)
+
+    const filePath = path.join(__dirname, "static", "Keyboard/Keyboard.html");
+    res.write(fs.readFileSync(filePath, "utf-8"));
+
+    res.end();
+}
+
+app.get("/", (req, res) => loadHomepage(req, res));
+app.get("/keyboard", (req, res) => loadKeyboard(req, res));
 
 var server = app.listen(port, hostname, () => {
     console.log(`Express App running at http://${hostname}:${port}/`);
