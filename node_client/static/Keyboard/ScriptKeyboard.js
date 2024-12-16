@@ -5,15 +5,9 @@ const domainName = window.location.hostname;
 
 console.log(domainName);
 
-<<<<<<< Updated upstream
-let ip = "192.168.178.145"
-let port = ":50000"
-let soket = ip + port
-=======
 let ip = "192.168.178.89"
 let port = ":"+"50000"
 let socket= ip+port
->>>>>>> Stashed changes
 
 var queue = [];
 
