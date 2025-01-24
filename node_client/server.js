@@ -38,8 +38,20 @@ function loadKeyboard(req,res) {
     res.end();
 }
 
+function loadMouse(req,res) {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.status(200)
+
+    const filePath = path.join(__dirname, "static", "Mouse/Mouse.html");
+    res.write(fs.readFileSync(filePath, "utf-8"));
+
+    res.end();
+}
+
 app.get("/", (req, res) => loadHomepage(req, res));
+app.get("/homepage", (req, res) => loadHomepage(req, res));
 app.get("/keyboard", (req, res) => loadKeyboard(req, res));
+app.get("/mouse", (req, res) => loadMouse(req, res));
 
 var server = app.listen(port, hostname, () => {
     console.log(`Express App running at http://${hostname}:${port}/`);
