@@ -102,6 +102,49 @@ function stopDrawing() {
 
 }
 
+function sendMouse(dir, mov) {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+        "direction": `${dir}`,
+        "movement": mov
+    });
+
+    var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+    };
+
+    fetch("http://192.168.178.145:50000/receive_mouse_move", requestOptions)
+        .then(response => response.text())
+        .then(result => console.log(result))
+        .catch(error => console.log('error', error));
+}
+
+function sendClick(button) {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+        "btn": button
+    });
+
+    var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+    };
+
+    fetch("http://192.168.178.145:50000/recive_mouse_click", requestOptions)
+        .then(response => response.text())
+        .then(result => console.log(result))
+        .catch(error => console.log('error', error));
+}
+
 function Draw(event) {
 
     if (paint) {
@@ -143,48 +186,14 @@ function Draw(event) {
         document.getElementById("speed").innerText = speed;
         document.getElementById("angle").innerText = angle_in_degrees;
 
-        let mov = 0, dir = "";
-        let check = false;
-
-
         if (x_relative > 150) {
-            dir = "right"
-            mov = x_relative - 145
-            check = true
+            sendMouse("left", 5)
         } else if (x_relative < -150) {
-            dir = "right"
-            mov = x_relative + 145
-            check = true
+            sendMouse("right", 5)
         } else if (y_relative > 150) {
-            dir = "down"
-            mov = y_relative - 145
-            check = true
+            sendMouse("down", 5)
         } else if (y_relative < -150) {
-            dir = "down"
-            mov = y_relative + 145
-            check = true
-        }
-
-        if (check) {
-            var myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json");
-
-            var raw = JSON.stringify({
-                "direction": `${dir}`,
-                "movement": mov
-            });
-
-            var requestOptions = {
-                method: 'POST',
-                headers: myHeaders,
-                body: raw,
-                redirect: 'follow'
-            };
-
-            fetch("http://192.168.178.145:50000/receive_mouse_move", requestOptions)
-                .then(response => response.text())
-                .then(result => console.log(result))
-                .catch(error => console.log('error', error));
+            sendMouse("up", 5)
         }
 
         //send( x_relative,y_relative,speed,angle_in_degrees);

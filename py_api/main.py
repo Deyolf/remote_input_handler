@@ -152,6 +152,14 @@ def receive_mouse_move():
 
     return jsonify({"error": "Invalid direction or movement"}), 400
 
+@app.route('/recive_mouse_click', methods=['POST'])
+def recive_mouse_click():
+    data = request.get_json()
+    btn = data.get('btn')
+    pyautogui.click(button=btn)
+    return "clicked"
+
+
 @app.route("/get_volume")
 def get_volume():
     current_volume_percentage = int(current_volume * 100)
