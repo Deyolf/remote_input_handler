@@ -1,11 +1,10 @@
 //intervals
 a = setInterval(getVolume, 500);
 
-const domainName = window.location.hostname;
+const ip = window.location.hostname;
 
-console.log(domainName);
+console.log(ip);
 
-let ip = "192.168.178.89"
 let port = ":"+"50000"
 let socket= ip+port
 

@@ -28,7 +28,7 @@ function loadHomepage(req, res) {
     res.end();
 }
 
-function loadKeyboard(req,res) {
+function loadKeyboard(req, res) {
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.status(200)
 
@@ -38,7 +38,7 @@ function loadKeyboard(req,res) {
     res.end();
 }
 
-function loadMouse(req,res) {
+function loadMouse(req, res) {
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.status(200)
 
@@ -48,6 +48,27 @@ function loadMouse(req,res) {
     res.end();
 }
 
+function diocane(req, res) {
+    fetch(`http://${hostname}:500000/recive_mouse_move`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: { a },
+    })
+        .then(response => response.json())
+        .then(response => {
+            console.log(response)
+            //if (response.status == 200)
+            //queue.shift(key)
+            return true
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            return false
+        });
+}
+app.get("/recive_mouse_move/:a", (req, res) => diocane(req, res))
 app.get("/", (req, res) => loadHomepage(req, res));
 app.get("/homepage", (req, res) => loadHomepage(req, res));
 app.get("/keyboard", (req, res) => loadKeyboard(req, res));

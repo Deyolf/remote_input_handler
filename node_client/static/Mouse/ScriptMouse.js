@@ -1,20 +1,22 @@
 //Nothing for u here
 //intervals
-let ip = "192.168.178.89"
-let port = ":50000"
-let soket= ip+port
+const ip = window.location.hostname;
+
+console.log(ip);
+
+let port = ":" + "50000"
+let socket = ip + port
 
 var canvas, ctx;
-
 window.addEventListener('load', () => {
 
     canvas = document.getElementById('canvas');
-    ctx = canvas.getContext('2d');          
-    resize(); 
+    ctx = canvas.getContext('2d');
+    resize();
     //Gestione movimento tramite mouse
-    document.addEventListener('mousedown', startDrawing); 
-    document.addEventListener('mouseup', stopDrawing); 
-    document.addEventListener('mousemove', Draw); 
+    document.addEventListener('mousedown', startDrawing);
+    document.addEventListener('mouseup', stopDrawing);
+    document.addEventListener('mousemove', Draw);
     //Gestione movimento tramite touchscreen
     document.addEventListener('touchstart', startDrawing);
     document.addEventListener('touchend', stopDrawing);
@@ -27,9 +29,6 @@ window.addEventListener('load', () => {
     document.getElementById("speed").innerText = 0;
     document.getElementById("angle").innerText = 0;
 });
-
-
-
 
 var width, height, radius, x_orig, y_orig;
 //Funzione che gestisce il ridimensionamento
@@ -80,7 +79,6 @@ function is_it_in_the_circle() {
     else return false
 }
 
-
 function startDrawing(event) {
     paint = true;
     getPosition(event);
@@ -91,7 +89,6 @@ function startDrawing(event) {
         Draw();
     }
 }
-
 
 function stopDrawing() {
     paint = false;
@@ -110,14 +107,14 @@ function Draw(event) {
     if (paint) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         background();
-        var angle_in_degrees,x, y, speed;
+        var angle_in_degrees, x, y, speed;
         var angle = Math.atan2((coord.y - y_orig), (coord.x - x_orig));
 
         if (Math.sign(angle) == -1) {
             angle_in_degrees = Math.round(-angle * 180 / Math.PI);
         }
         else {
-            angle_in_degrees =Math.round( 360 - angle * 180 / Math.PI);
+            angle_in_degrees = Math.round(360 - angle * 180 / Math.PI);
         }
 
 
@@ -132,19 +129,63 @@ function Draw(event) {
             joystick(x, y);
         }
 
-    
+
         getPosition(event);
 
-        var speed =  Math.round(100 * Math.sqrt(Math.pow(x - x_orig, 2) + Math.pow(y - y_orig, 2)) / radius);
+        var speed = Math.round(100 * Math.sqrt(Math.pow(x - x_orig, 2) + Math.pow(y - y_orig, 2)) / radius);
 
         var x_relative = Math.round(x - x_orig);
         var y_relative = Math.round(y - y_orig);
-        
 
-        document.getElementById("x_coordinate").innerText =  x_relative;
-        document.getElementById("y_coordinate").innerText =y_relative ;
+
+        document.getElementById("x_coordinate").innerText = x_relative;
+        document.getElementById("y_coordinate").innerText = y_relative;
         document.getElementById("speed").innerText = speed;
         document.getElementById("angle").innerText = angle_in_degrees;
+
+        let mov = 0, dir = "";
+        let check = false;
+
+
+        if (x_relative > 150) {
+            dir = "right"
+            mov = x_relative - 145
+            check = true
+        } else if (x_relative < -150) {
+            dir = "right"
+            mov = x_relative + 145
+            check = true
+        } else if (y_relative > 150) {
+            dir = "down"
+            mov = y_relative - 145
+            check = true
+        } else if (y_relative < -150) {
+            dir = "down"
+            mov = y_relative + 145
+            check = true
+        }
+
+        if (check) {
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+
+            var raw = JSON.stringify({
+                "direction": `${dir}`,
+                "movement": mov
+            });
+
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+
+            fetch("http://192.168.178.145:50000/receive_mouse_move", requestOptions)
+                .then(response => response.text())
+                .then(result => console.log(result))
+                .catch(error => console.log('error', error));
+        }
 
         //send( x_relative,y_relative,speed,angle_in_degrees);
     }
