@@ -7,7 +7,6 @@ console.log(ip);
 let port = ":" + "50000"
 let socket = ip + port
 
-var canvas, ctx;
 window.addEventListener('load', () => {
 
     canvas = document.getElementById('canvas');
@@ -29,6 +28,34 @@ window.addEventListener('load', () => {
     document.getElementById("speed").innerText = 0;
     document.getElementById("angle").innerText = 0;
 });
+
+
+let succtimestamp=Date.now();
+
+function move(x,y,speed){
+    speed=Math.floor(speed/20) 
+    console.log(speed)
+    console.log(x)
+    console.log(y)
+    if (Date.now()-succtimestamp>50){
+        if (x > 50) {
+            sendMouse("right", speed)
+            succtimestamp=Date.now()
+        } 
+        if (x < -50) {
+            sendMouse("left", speed)
+            succtimestamp=Date.now()
+        } 
+        if (y > 50) {
+            sendMouse("down", speed)
+            succtimestamp=Date.now()
+        } 
+        if (y < -50) {
+            sendMouse("up", speed)
+            succtimestamp=Date.now()
+        }
+    }
+}
 
 var width, height, radius, x_orig, y_orig;
 //Funzione che gestisce il ridimensionamento
@@ -186,16 +213,8 @@ function Draw(event) {
         document.getElementById("speed").innerText = speed;
         document.getElementById("angle").innerText = angle_in_degrees;
 
-        if (x_relative > 150) {
-            sendMouse("right", 5)
-        } else if (x_relative < -150) {
-            sendMouse("left", 5)
-        } else if (y_relative > 150) {
-            sendMouse("down", 5)
-        } else if (y_relative < -150) {
-            sendMouse("up", 5)
-        }
-
+        move(x_relative,y_relative,speed);
+        
         //send( x_relative,y_relative,speed,angle_in_degrees);
     }
 } 
