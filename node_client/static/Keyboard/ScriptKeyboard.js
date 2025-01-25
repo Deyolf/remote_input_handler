@@ -3,16 +3,10 @@ a = setInterval(getVolume, 500);
 
 const ip = window.location.hostname;
 
-<<<<<<< Updated upstream
 console.log(ip);
 
 let port = ":"+"50000"
 let socket= ip+port
-=======
-let ip = "172.20.10.12"
-let port = ":50000"
-let soket = ip + port
->>>>>>> Stashed changes
 
 var queue = [];
 

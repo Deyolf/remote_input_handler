@@ -118,7 +118,7 @@ function sendMouse(dir, mov) {
         redirect: 'follow'
     };
 
-    fetch("http://192.168.178.145:50000/receive_mouse_move", requestOptions)
+    fetch(`http://${socket}/receive_mouse_move`, requestOptions)
         .then(response => response.text())
         .then(result => console.log(result))
         .catch(error => console.log('error', error));
@@ -139,7 +139,7 @@ function sendClick(button) {
         redirect: 'follow'
     };
 
-    fetch("http://192.168.178.145:50000/recive_mouse_click", requestOptions)
+    fetch(`http://${socket}/recive_mouse_click`, requestOptions)
         .then(response => response.text())
         .then(result => console.log(result))
         .catch(error => console.log('error', error));
@@ -187,9 +187,9 @@ function Draw(event) {
         document.getElementById("angle").innerText = angle_in_degrees;
 
         if (x_relative > 150) {
-            sendMouse("left", 5)
-        } else if (x_relative < -150) {
             sendMouse("right", 5)
+        } else if (x_relative < -150) {
+            sendMouse("left", 5)
         } else if (y_relative > 150) {
             sendMouse("down", 5)
         } else if (y_relative < -150) {
