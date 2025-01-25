@@ -52,7 +52,6 @@ def handle_options_request():
 devices = AudioUtilities.GetSpeakers()
 interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
 volume = cast(interface, POINTER(IAudioEndpointVolume))
-current_volume = float(volume.GetMasterVolumeLevelScalar())
 
 # Define the path to your Node.js server
 node_client_path = '../node_client/server.js'
@@ -162,6 +161,7 @@ def recive_mouse_click():
 
 @app.route("/get_volume")
 def get_volume():
+    current_volume = float(volume.GetMasterVolumeLevelScalar())
     current_volume_percentage = int(current_volume * 100)
     data = {"volume": current_volume_percentage}
     print(f"Current volume: {current_volume_percentage}%")
