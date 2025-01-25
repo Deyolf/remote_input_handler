@@ -15,12 +15,12 @@ window.addEventListener('load', () => {
     //Gestione movimento tramite mouse
     document.addEventListener('mousedown', startDrawing);
     document.addEventListener('mouseup', stopDrawing);
-    document.addEventListener('mousemove', Draw);
+        //document.addEventListener('mousemove', Draw);
     //Gestione movimento tramite touchscreen
     document.addEventListener('touchstart', startDrawing);
     document.addEventListener('touchend', stopDrawing);
     document.addEventListener('touchcancel', stopDrawing);
-    document.addEventListener('touchmove', Draw);
+        //document.addEventListener('touchmove', Draw);
     window.addEventListener('resize', resize);
 
     document.getElementById("x_coordinate").innerText = 0;
@@ -96,7 +96,7 @@ function getPosition(event) {
     e = window.event || e;
     var mouse_x = e.clientX || event.touches[0].clientX; //touches[0] prende i dati del primo tocco 
     var mouse_y = e.clientY || event.touches[0].clientY; //client X e Y prendono la posizione X/Y assoluta del mouse o del tocco
-    coord.x = mouse_x - canvas.offsetLeft;                   //Otteniamo la posizione effettiva
+    coord.x = mouse_x - canvas.offsetLeft;               //Otteniamo la posizione effettiva
     coord.y = mouse_y - canvas.offsetTop;
 }
 //Tramite teorema di pitagora troviamo la posizione del mouse rispetto alla base
@@ -113,7 +113,8 @@ function startDrawing(event) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         background();
         joystick(coord.x, coord.y);
-        Draw();
+        intervallo_che_vuole_Fabio = setInterval(Draw, 1);
+        //Draw();
     }
 }
 
@@ -126,7 +127,7 @@ function stopDrawing() {
     document.getElementById("y_coordinate").innerText = 0;
     document.getElementById("speed").innerText = 0;
     document.getElementById("angle").innerText = 0;
-
+    clearInterval(intervallo_che_vuole_Fabio);
 }
 
 function sendMouse(dir, mov) {
