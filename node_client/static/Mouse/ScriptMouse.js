@@ -15,12 +15,12 @@ window.addEventListener('load', () => {
     //Gestione movimento tramite mouse
     document.addEventListener('mousedown', startDrawing);
     document.addEventListener('mouseup', stopDrawing);
-        //document.addEventListener('mousemove', Draw);
+        document.addEventListener('mousemove', Draw);
     //Gestione movimento tramite touchscreen
     document.addEventListener('touchstart', startDrawing);
     document.addEventListener('touchend', stopDrawing);
     document.addEventListener('touchcancel', stopDrawing);
-        //document.addEventListener('touchmove', Draw);
+        document.addEventListener('touchmove', Draw);
     window.addEventListener('resize', resize);
 
     document.getElementById("x_coordinate").innerText = 0;
@@ -33,7 +33,7 @@ window.addEventListener('load', () => {
 let succtimestamp=Date.now();
 
 function move(x,y,speed){
-    speed=Math.floor(speed/20) 
+    speed=Math.floor(speed/12.5) 
     console.log(speed)
     console.log(x)
     console.log(y)
@@ -61,7 +61,7 @@ var width, height, radius, x_orig, y_orig;
 //Funzione che gestisce il ridimensionamento
 function resize() {
     width = window.innerWidth;
-    radius = 200;
+    radius = 100;
     height = radius * 6.5;
     ctx.canvas.width = width;
     ctx.canvas.height = height;
