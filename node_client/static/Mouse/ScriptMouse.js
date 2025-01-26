@@ -15,12 +15,12 @@ window.addEventListener('load', () => {
     //Gestione movimento tramite mouse
     document.addEventListener('mousedown', startDrawing);
     document.addEventListener('mouseup', stopDrawing);
-        document.addEventListener('mousemove', Draw);
+    document.addEventListener('mousemove', Draw);
     //Gestione movimento tramite touchscreen
     document.addEventListener('touchstart', startDrawing);
     document.addEventListener('touchend', stopDrawing);
     document.addEventListener('touchcancel', stopDrawing);
-        document.addEventListener('touchmove', Draw);
+    document.addEventListener('touchmove', Draw);
     window.addEventListener('resize', resize);
 
     document.getElementById("x_coordinate").innerText = 0;
@@ -29,31 +29,17 @@ window.addEventListener('load', () => {
     document.getElementById("angle").innerText = 0;
 });
 
-
-let succtimestamp=Date.now();
-
-function move(x,y,speed){
-    speed=Math.floor(speed/20) 
+function move(x, y, speed, angle) {
+    speed = Math.floor(speed / 15)
     console.log(speed)
     console.log(x)
     console.log(y)
-        if (x > 50) {
-            sendMouse("right", speed)
-            succtimestamp=Date.now()
-        } 
-        if (x < -50) {
-            sendMouse("left", speed)
-            succtimestamp=Date.now()
-        } 
-        if (y > 50) {
-            sendMouse("down", speed)
-            succtimestamp=Date.now()
-        } 
-        if (y < -50) {
-            sendMouse("up", speed)
-            succtimestamp=Date.now()
-        }
-    
+    let x_movement = Math.floor(speed * Math.cos(angle));
+    let y_movement = Math.floor(speed * Math.sin(angle));
+    console.log(`x_movement: ${x_movement}`)
+    console.log(`y_movement: ${y_movement}`)
+    sendMouse(x_movement, y_movement)
+
 }
 
 var width, height, radius, x_orig, y_orig;
@@ -112,7 +98,7 @@ function startDrawing(event) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         background();
         joystick(coord.x, coord.y);
-        intervallo_che_vuole_Fabio = setInterval(Draw, 5);
+        intervallo_che_vuole_Fabio = setInterval(Draw, 7);
         //Draw();
     }
 }
@@ -129,13 +115,13 @@ function stopDrawing() {
     clearInterval(intervallo_che_vuole_Fabio);
 }
 
-function sendMouse(dir, mov) {
+function sendMouse(x_movement, y_movement) {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
     var raw = JSON.stringify({
-        "direction": `${dir}`,
-        "movement": mov
+        "x_movement": x_movement,
+        "y_movement": y_movement
     });
 
     var requestOptions = {
@@ -213,8 +199,8 @@ function Draw(event) {
         document.getElementById("speed").innerText = speed;
         document.getElementById("angle").innerText = angle_in_degrees;
 
-        move(x_relative,y_relative,speed);
-        
+        move(x_relative, y_relative, speed, angle);
+
         //send( x_relative,y_relative,speed,angle_in_degrees);
     }
 } 

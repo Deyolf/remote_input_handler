@@ -135,19 +135,12 @@ def receive_volume():
 def receive_mouse_move():
     x, y = pyautogui.position()
     data = request.get_json()
-    direction = data.get('direction')
-    movement = data.get('movement', 0)
+    x_movement = data.get('x_movement', 0)
+    y_movement = data.get('y_movement', 0)
     
-    if direction in ['left', 'right', 'up', 'down'] and isinstance(movement, int):
-        if direction == 'left':
-            pyautogui.moveTo(x - movement, y)
-        elif direction == 'right':
-            pyautogui.moveTo(x + movement, y)
-        elif direction == 'up':
-            pyautogui.moveTo(x, y - movement)
-        elif direction == 'down':
-            pyautogui.moveTo(x, y + movement)
-        return jsonify({"message": f"Moved {direction} by {movement}"}), 200
+    if isinstance(x_movement, int) and isinstance(y_movement, int):
+        pyautogui.moveTo(x + x_movement, y+y_movement)
+        return jsonify({"message": f"Moved x:{x_movement} y:{y_movement}"}), 200
 
     return jsonify({"error": "Invalid direction or movement"}), 400
 
