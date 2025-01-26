@@ -33,11 +33,10 @@ window.addEventListener('load', () => {
 let succtimestamp=Date.now();
 
 function move(x,y,speed){
-    speed=Math.floor(speed/12.5) 
+    speed=Math.floor(speed/20) 
     console.log(speed)
     console.log(x)
     console.log(y)
-    if (Date.now()-succtimestamp>50){
         if (x > 50) {
             sendMouse("right", speed)
             succtimestamp=Date.now()
@@ -54,7 +53,7 @@ function move(x,y,speed){
             sendMouse("up", speed)
             succtimestamp=Date.now()
         }
-    }
+    
 }
 
 var width, height, radius, x_orig, y_orig;
@@ -113,7 +112,7 @@ function startDrawing(event) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         background();
         joystick(coord.x, coord.y);
-        intervallo_che_vuole_Fabio = setInterval(Draw, 1);
+        intervallo_che_vuole_Fabio = setInterval(Draw, 5);
         //Draw();
     }
 }
