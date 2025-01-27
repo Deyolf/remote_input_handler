@@ -12,10 +12,12 @@ window.addEventListener('load', () => {
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
     resize();
+
     //Gestione movimento tramite mouse
     document.addEventListener('mousedown', startDrawing);
     document.addEventListener('mouseup', stopDrawing);
     document.addEventListener('mousemove', Draw);
+    
     //Gestione movimento tramite touchscreen
     document.addEventListener('touchstart', startDrawing);
     document.addEventListener('touchend', stopDrawing);
@@ -53,6 +55,7 @@ function resize() {
     background();
     joystick(width / 2, height / 3);
 }
+
 //Posizionamento e creazione BASE joystick  
 function background() {
     x_orig = width / 2;
@@ -63,6 +66,7 @@ function background() {
     ctx.fillStyle = '#ECE5E5';
     ctx.fill();
 }
+
 //Creazione del joystick per il movimento
 function joystick(width, height) {
     ctx.beginPath();
@@ -84,6 +88,7 @@ function getPosition(event) {
     coord.x = mouse_x - canvas.offsetLeft;               //Otteniamo la posizione effettiva
     coord.y = mouse_y - canvas.offsetTop;
 }
+
 //Tramite teorema di pitagora troviamo la posizione del mouse rispetto alla base
 function is_it_in_the_circle() {
     var current_radius = Math.sqrt(Math.pow(coord.x - x_orig, 2) + Math.pow(coord.y - y_orig, 2));
@@ -173,7 +178,6 @@ function Draw(event) {
             angle_in_degrees = Math.round(360 - angle * 180 / Math.PI);
         }
 
-
         if (is_it_in_the_circle()) {
             joystick(coord.x, coord.y);
             x = coord.x;
@@ -185,14 +189,12 @@ function Draw(event) {
             joystick(x, y);
         }
 
-
         getPosition(event);
 
         var speed = Math.round(100 * Math.sqrt(Math.pow(x - x_orig, 2) + Math.pow(y - y_orig, 2)) / radius);
 
         var x_relative = Math.round(x - x_orig);
         var y_relative = Math.round(y - y_orig);
-
 
         document.getElementById("x_coordinate").innerText = x_relative;
         document.getElementById("y_coordinate").innerText = y_relative;
