@@ -46,7 +46,7 @@ var width, height, radius, x_orig, y_orig;
 //Funzione che gestisce il ridimensionamento
 function resize() {
     width = window.innerWidth;
-    radius = 100;
+    radius = 120;
     height = radius * 6.5;
     ctx.canvas.width = width;
     ctx.canvas.height = height;
