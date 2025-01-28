@@ -1,11 +1,12 @@
 //Nothing for u here
 //intervals
 const ip = window.location.hostname;
+const socket = new WebSocket(`ws://${ip}:8765`);
 
 console.log(ip);
 
 let port = ":" + "50000"
-let socket = ip + port
+let apisocket = ip + port
 
 window.addEventListener('load', () => {
 
@@ -31,6 +32,16 @@ window.addEventListener('load', () => {
     document.getElementById("angle").innerText = 0;
 });
 
+socket.onopen = function (event) {
+    console.log('You are Connected to WebSocket Server');
+};
+socket.onmessage = function (event) {
+    console.log(event.data);
+};
+socket.onclose = function (event) {
+    console.log('Disconnected from WebSocket server');
+};
+
 function move(x, y, speed, angle) {
     speed = Math.floor(speed / 15)
     console.log(speed)
@@ -40,8 +51,7 @@ function move(x, y, speed, angle) {
     let y_movement = Math.floor(speed * Math.sin(angle));
     console.log(`x_movement: ${x_movement}`)
     console.log(`y_movement: ${y_movement}`)
-    sendMouse(x_movement, y_movement)
-
+    socket.send(`${x_movement},${y_movement}`);
 }
 
 var width, height, radius, x_orig, y_orig;
@@ -103,8 +113,8 @@ function startDrawing(event) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         background();
         joystick(coord.x, coord.y);
-        intervallo_che_vuole_Fabio = setInterval(Draw, 7);
-        //Draw();
+        //intervallo_che_vuole_Fabio = setInterval(Draw, 7);
+        Draw();
     }
 }
 
@@ -117,29 +127,7 @@ function stopDrawing() {
     document.getElementById("y_coordinate").innerText = 0;
     document.getElementById("speed").innerText = 0;
     document.getElementById("angle").innerText = 0;
-    clearInterval(intervallo_che_vuole_Fabio);
-}
-
-function sendMouse(x_movement, y_movement) {
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
-    var raw = JSON.stringify({
-        "x_movement": x_movement,
-        "y_movement": y_movement
-    });
-
-    var requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: raw,
-        redirect: 'follow'
-    };
-
-    fetch(`http://${socket}/receive_mouse_move`, requestOptions)
-        .then(response => response.text())
-        .then(result => console.log(result))
-        .catch(error => console.log('error', error));
+    //clearInterval(intervallo_che_vuole_Fabio);
 }
 
 function sendClick(button) {
@@ -157,7 +145,7 @@ function sendClick(button) {
         redirect: 'follow'
     };
 
-    fetch(`http://${socket}/recive_mouse_click`, requestOptions)
+    fetch(`http://${apisocket}/recive_mouse_click`, requestOptions)
         .then(response => response.text())
         .then(result => console.log(result))
         .catch(error => console.log('error', error));
