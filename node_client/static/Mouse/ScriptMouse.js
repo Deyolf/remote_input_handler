@@ -5,8 +5,8 @@ const socket = new WebSocket(`ws://${ip}:8765`);
 
 console.log(ip);
 
-let port = ":" + "50000"
-let apisocket = ip + port
+let port = ":" + "50000";
+let apisocket = ip + port;
 
 window.addEventListener('load', () => {
 
@@ -43,14 +43,14 @@ socket.onclose = function (event) {
 };
 
 function move(x, y, speed, angle) {
-    speed = Math.floor(speed / 15)
-    console.log(speed)
-    console.log(x)
-    console.log(y)
+    speed = Math.floor(speed / 15);
+    console.log(speed);
+    console.log(x);
+    console.log(y);
     let x_movement = Math.floor(speed * Math.cos(angle));
     let y_movement = Math.floor(speed * Math.sin(angle));
-    console.log(`x_movement: ${x_movement}`)
-    console.log(`y_movement: ${y_movement}`)
+    console.log(`x_movement: ${x_movement}`);
+    console.log(`y_movement: ${y_movement}`);
     socket.send(`${x_movement},${y_movement}`);
 }
 

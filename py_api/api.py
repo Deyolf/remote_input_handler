@@ -25,7 +25,7 @@ if os.path.exists("../ip.txt"):
 
 with open("../ip.txt", 'w') as file:
     file.write(ip)
-""" 
+
 # Initialize Flask app
 app = Flask(__name__)
 CORS(app, supports_credentials=True, resources={
@@ -167,39 +167,20 @@ def shutdown():
     node_process.join()
     return jsonify({"message": "Node server is stopping..."}), 200
 
- """
+ 
 
 # Entry point
 if __name__ == '__main__':
     # Create an event for stopping the Node server
-    
-    stop_event = Event()
-
-    # Start the Node server process
-    node_process = Process(target=run_node_server, args=(stop_event,))
-    node_process.start()
-
-    # Start the websocket.py script as a subprocess
-    websocket_process = Popen(['python', 'websocket.py'])
-    api_process = Popen(['python', 'api.py'])
-
-    print("Eseguo normalmente")
 
     try:
         # Run the Flask app
         ip = '127.0.0.1'  # Replace with your desired IP
         port = 5000       # Replace with your desired port
-        #app.run(host=ip, port=port)
+        app.run(host=ip, port=port)
     except KeyboardInterrupt:
         print("Shutting down...")
         # Stop the Node server process
         stop_event.set()
-        node_process.join()
-
-        # Terminate the websocket.py subprocess
-        websocket_process.terminate()
-        api_process.terminate()
-        websocket_process.wait()
-        api_process.wait()
 
         print("All processes stopped.")
