@@ -1,4 +1,2 @@
-./ip.txt
 /node_client/node_modules
-ip.txt
-*.txt
+/py_api/__pycache__

@@ -1,13 +1,9 @@
 import asyncio
 from websockets.asyncio.server import serve
 import pyautogui
-import socket
+import handling_ip
 
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-s.connect(("8.8.8.8", 80))
-ip = s.getsockname()[0]
-s.close()
-print(ip)
+ip = handling_ip.ip()
 
 async def echo(websocket):
     async for message in websocket:
