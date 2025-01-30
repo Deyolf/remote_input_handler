@@ -6,20 +6,6 @@ const ip = window.location.hostname; //ottenere l'ip
 const port = "50000"; //definizione porta
 const socket = ip + ":" + port; //definizione socket per comunicazione api
 
-function sendBuffer(key) {
-  fetch(`http://${socket}/receive_keycap`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ keycap: key }),
-  })
-    .then((response) => response.json())
-    .catch((error) => {
-      console.error("Error:", error);
-    });
-}
-
 function sendKeycap(key) {
   console.log(key);
   fetch(`http://${socket}/receive_keycap`, {
@@ -32,8 +18,6 @@ function sendKeycap(key) {
     .then((response) => response.json())
     .then((response) => {
       console.log(response);
-      //if (response.status == 200)
-      //queue.shift(key)
       return true;
     })
     .catch((error) => {
@@ -110,7 +94,7 @@ function getVolume() {
 }
 
 function AltF4() {
-  //alt tab
+  //alt f4
   sendKeycapHold("Alt");
   sendKeycap("f4");
   sendKeycapRelease("Alt");
@@ -125,8 +109,6 @@ function TskMgr() {
   sendKeycapRelease("Ctrl");
 }
 
-var promises = [];
-var letters = [];
 const input = document.getElementById("textInput");
 input.addEventListener("input", () => {
   console.log(input.value);
