@@ -1,30 +1,19 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import pyautogui
-import socket
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from ctypes import cast, POINTER
 from comtypes import CLSCTX_ALL
 from subprocess import Popen
-import os
 import time
 from multiprocessing import Process, Event
+import ip_handling
 
 # Get the IP address
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-s.connect(("8.8.8.8", 80))
-ip = s.getsockname()[0]
-s.close()
-print(ip)
+ip = ip_handling.ip()
+ip_handling.save_ip(ip)
 
 port = 50000
-
-# Write IP to a file
-if os.path.exists("../ip.txt"):
-    os.remove("../ip.txt")
-
-with open("../ip.txt", 'w') as file:
-    file.write(ip)
 
 # Initialize Flask app
 app = Flask(__name__)
