@@ -77,7 +77,7 @@ def set_volume(vol_percentage):
     scalar_value = vol_percentage / 100.0
     volume.SetMasterVolumeLevelScalar(scalar_value, None)
     current_volume = float(volume.GetMasterVolumeLevelScalar())
-    print(f"Volume set to: {vol_percentage}%")
+    #print(f"Volume set to: {vol_percentage}%")
 
 # Flask routes
 @app.route('/receive_keycap_string', methods=['POST'])
@@ -86,7 +86,7 @@ def receive_keycap_string():
     string = data.get('keycap_string')
     if string:
         for letter in string:
-            print(letter)
+            #print(letter)
             pyautogui.press(letter)
         return jsonify({"message": f"Received keycap: {string}"}), 200
     return jsonify({"error": "Keycap data missing"}), 400
@@ -96,7 +96,7 @@ def receive_keycap():
     data = request.get_json()
     keycap = data.get('keycap')
     if keycap:
-        print(keycap)
+        #print(keycap)
         pyautogui.press(keycap)
         return jsonify({"message": f"Received keycap: {keycap}"})
     return jsonify({"error": "Keycap data missing"}), 400
@@ -106,7 +106,7 @@ def receive_keycap_hold():
     data = request.get_json()
     keycap = data.get('keycap')
     if keycap:
-        print(keycap)
+        #print(keycap)
         pyautogui.keyDown(keycap)
         return jsonify({"message": f"Received keycap: {keycap}"})
     return jsonify({"error": "Keycap data missing"}), 400
@@ -116,7 +116,7 @@ def receive_keycap_release():
     data = request.get_json()
     keycap = data.get('keycap')
     if keycap:
-        print(keycap)
+        #print(keycap)
         pyautogui.keyUp(keycap)
         return jsonify({"message": f"Received keycap: {keycap}"})
     return jsonify({"error": "Keycap data missing"}), 400
@@ -126,7 +126,7 @@ def receive_volume():
     data = request.get_json()
     volume = data.get('volume')
     if volume is not None:
-        print(volume)
+        #print(volume)
         set_volume(int(volume))
         return jsonify({"message": f"Received volume: {volume}"})
     return jsonify({"error": "Volume data missing"}), 400
@@ -157,7 +157,7 @@ def get_volume():
     current_volume = float(volume.GetMasterVolumeLevelScalar())
     current_volume_percentage = int(current_volume * 100)
     data = {"volume": current_volume_percentage}
-    print(f"Current volume: {current_volume_percentage}%")
+    #print(f"Current volume: {current_volume_percentage}%")
     return jsonify(data)
 
 # Shutdown hook for the Flask app
@@ -187,8 +187,6 @@ if __name__ == '__main__':
 
     try:
         # Run the Flask app
-        ip = '127.0.0.1'  # Replace with your desired IP
-        port = 5000       # Replace with your desired port
         app.run(host=ip, port=port)
     except KeyboardInterrupt:
         print("Shutting down...")
