@@ -8,8 +8,6 @@ console.log(ip);
 let port = ":"+"50000"
 let socket= ip+port
 
-var queue = [];
-
 function sendBuffer(key) {
     console.log(key)
     fetch(`http://${socket}/receive_keycap`, {
@@ -30,7 +28,6 @@ function sendBuffer(key) {
 
 function sendKeycap(key) {
     console.log(key)
-    queue.push(key)
     fetch(`http://${socket}/receive_keycap`, {
         method: 'POST',
         headers: {
@@ -41,14 +38,12 @@ function sendKeycap(key) {
         .then(response => response.json())
         .then(response => {
             console.log(response)
-            console.log(queue)
             //if (response.status == 200)
             //queue.shift(key)
             return true
         })
         .catch((error) => {
             console.error('Error:', error);
-            console.log(queue)
             return false
         });
 }
