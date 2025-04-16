@@ -1,2 +1,4 @@
 /node_client/node_modules
 /py_api/__pycache__
+node_client/package-lock.json
+ip.txt
