@@ -19,7 +19,7 @@ function sendClick(button) {
     .catch(console.error);
 }
 
-document.addEventListener("click", function (event) {
+/*document.addEventListener("click", function (event) {
   if (!event.target.closest("button")) {
     const realWidth = window.innerWidth;
     const realHeight = window.innerHeight;
@@ -32,4 +32,17 @@ document.addEventListener("click", function (event) {
 
     document.getElementById("mouseCoords").value = `X: ${mappedX}, Y: ${mappedY}`;
   }
+});*/
+
+document.addEventListener("mousemove", function (event) {
+  const realWidth = window.innerWidth;
+  const realHeight = window.innerHeight;
+
+  const x = event.clientX;
+  const y = event.clientY;
+
+  const mappedX = Math.round((x / realWidth) * 1920);
+  const mappedY = Math.round((y / realHeight) * 1080);
+
+  document.getElementById("mouseCoords").value = `X: ${mappedX}, Y: ${mappedY}`;
 });
