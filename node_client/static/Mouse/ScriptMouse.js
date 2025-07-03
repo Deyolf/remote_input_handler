@@ -21,8 +21,15 @@ function sendClick(button) {
 
 document.addEventListener("click", function (event) {
   if (!event.target.closest("button")) {
+    const realWidth = window.innerWidth;
+    const realHeight = window.innerHeight;
+
     const x = event.clientX;
     const y = event.clientY;
-    document.getElementById("mouseCoords").value = `X: ${x}, Y: ${y}`;
+
+    const mappedX = Math.round((x / realWidth) * 1920);
+    const mappedY = Math.round((y / realHeight) * 1080);
+
+    document.getElementById("mouseCoords").value = `X: ${mappedX}, Y: ${mappedY}`;
   }
 });
