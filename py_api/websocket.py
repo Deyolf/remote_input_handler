@@ -7,12 +7,11 @@ ip = handling_ip.ip()
 
 async def echo(websocket):
     async for message in websocket:
-        x, y = pyautogui.position()
         obj = message.split(",")
         #print(obj)
         response = "moved " + message
         websocket.send(response)
-        pyautogui.moveTo(x + int(obj[0]), y + int(obj[1]))
+        pyautogui.moveTo(int(obj[0]), int(obj[1]))
 
 async def main():
     async with serve(echo, ip, 8765) as server:
