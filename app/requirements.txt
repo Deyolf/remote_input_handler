@@ -1,0 +1,5 @@
+flask
+flask-sock
+pyautogui
+pycaw
+comtypes

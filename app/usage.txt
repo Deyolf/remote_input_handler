@@ -1,0 +1,4 @@
+C:\Users\colom>cd "C:\users\colom\desktop\github\remote_input_handler\app"
+C:\Users\colom\Desktop\Github\remote_input_handler\app>python -m venv venv
+C:\Users\colom\Desktop\Github\remote_input_handler\app>venv\Scripts\activate
+(venv) C:\Users\colom\Desktop\Github\remote_input_handler\app>pip install -r requirements.txt

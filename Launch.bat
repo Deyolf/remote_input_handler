@@ -1,3 +1,5 @@
-cd ./py_api/
-python main.py
-cd ..
+cd ./app/
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+py server.py

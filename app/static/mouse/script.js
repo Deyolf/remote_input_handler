@@ -1,8 +1,8 @@
 const ip = window.location.hostname;
-const port = ":" + "50000";
+const port = ":" + "50050";
 const apisocket = ip + port;
 
-const socket = new WebSocket(`ws://${ip}:8765`);
+const socket = new WebSocket(`ws://${ip}:50050/ws`);
 
 document.getElementById("left").style = "display: none"
 document.getElementById("right").style = "display: none"
